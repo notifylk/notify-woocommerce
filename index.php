@@ -1,0 +1,6 @@
+<?php
+
+/* 
+ * Nothing goes here.
+ */
+
