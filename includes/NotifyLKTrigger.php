@@ -95,6 +95,8 @@ class NotifyLKTrigger {
             '{{order_id}}' => $order_details->get_order_number(),
             '{{order_amount}}' => $order_details->get_total(),
             '{{order_status}}' => ucfirst($order_details->get_status()),
+            '{{first_name}}' => ucfirst($order_details->billing_first_name),
+            '{{last_name}}' => ucfirst($order_details->billing_last_name),
         );
         return str_replace(array_keys($replacements_string), $replacements_string, $message);
     }
