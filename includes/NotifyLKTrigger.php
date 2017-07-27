@@ -20,7 +20,7 @@ class NotifyLKTrigger {
         $this->ApiKey = get_option($this->prefix . 'api_key');
         $this->userId = get_option($this->prefix . 'user_id');
         $this->sendId = get_option($this->prefix . 'from_id');
-        $this->adminRecipients = get_option($this->prefix.'sms_recipients');
+        $this->adminRecipients = get_option($this->prefix.'admin_sms_recipients');
 
         /*
          * Get enabled or desabled.
@@ -146,8 +146,9 @@ class NotifyLKTrigger {
                 break;
         }
         $message = (empty($message) ? $this->contentDefault : $message);
-        $message = self::shortCode($message, $order_details);
-        $phone = $this->reformatPhoneNumbers($order_details->billing_phone);        
+        $message = self::shortCode($message, $order_details);        
+        $pn = ('admin-order' === $status ? $this->adminRecipients : $order_details->billing_phone);
+        $phone = $this->reformatPhoneNumbers($pn);              
         $apiInt = new \NotifyLk\Api\SmsApi();
         $apiInt->sendSMS($this->userId, $this->ApiKey, $message, $phone, $this->sendId);
     }
