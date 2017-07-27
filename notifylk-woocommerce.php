@@ -9,5 +9,5 @@
  * License:           GPLv2 or laterx
  * Text Domain:       notifylk
  */
-include '/includes/core-import.php';
+include 'includes/core-import.php';
 new NotifyLKSMS(__FILE__);
