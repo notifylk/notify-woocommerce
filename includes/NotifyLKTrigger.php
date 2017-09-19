@@ -1,18 +1,19 @@
 <?php
 
 class NotifyLKTrigger {
-
     /*
      * Declare setting prefix and other values.
      */
+
     private $prefix = 'notifylk_sms_woo_';
     private $ApiKey, $userId, $sendId, $adminRecipients;
     private $yesPending, $yesOnHold, $yesProcessing, $yesCompleted, $yesCancelled, $yesRefunded, $yesFailed, $yesAdminMsg;
     private $contentDefault, $contentPending, $contentOnHold, $contentProcessing, $contentCompleted, $contentCancelled, $contentRefunded, $contentFailed, $contentAdmin;
-    
+
     /*
      * Initialize values.
      */
+
     public function __construct() {
         /*
          * Get NotifyLK configuration settings.
@@ -20,7 +21,7 @@ class NotifyLKTrigger {
         $this->ApiKey = get_option($this->prefix . 'api_key');
         $this->userId = get_option($this->prefix . 'user_id');
         $this->sendId = get_option($this->prefix . 'from_id');
-        $this->adminRecipients = get_option($this->prefix.'admin_sms_recipients');
+        $this->adminRecipients = get_option($this->prefix . 'admin_sms_recipients');
 
         /*
          * Get enabled or desabled.
@@ -33,7 +34,7 @@ class NotifyLKTrigger {
         $this->yesRefunded = get_option($this->prefix . 'send_sms_refunded') == 'yes';
         $this->yesFailed = get_option($this->prefix . 'send_sms_failed') == 'yes';
         $this->yesAdminMsg = get_option($this->prefix . 'enable_admin_sms') == 'yes';
-        
+
         /*
          * Get messages
          */
@@ -69,7 +70,7 @@ class NotifyLKTrigger {
     }
 
     public function notify_send_customer_sms_for_woo_order_status_processing($order_id) {
-        if ($this->yesProcessing){
+        if ($this->yesProcessing) {
             $this->NotifyLKsend($order_id, 'processing');
         }
     }
@@ -97,6 +98,8 @@ class NotifyLKTrigger {
             '{{order_status}}' => ucfirst($order_details->get_status()),
             '{{first_name}}' => ucfirst($order_details->billing_first_name),
             '{{last_name}}' => ucfirst($order_details->billing_last_name),
+            '{{billing_city}}' => explode('<br/>', $order_details->get_formatted_shipping_address())[4],
+            '{{customer_phone}}' => $order_details->billing_phone,
         );
         return str_replace(array_keys($replacements_string), $replacements_string, $message);
     }
@@ -146,9 +149,9 @@ class NotifyLKTrigger {
                 break;
         }
         $message = (empty($message) ? $this->contentDefault : $message);
-        $message = self::shortCode($message, $order_details);        
+        $message = self::shortCode($message, $order_details);
         $pn = ('admin-order' === $status ? $this->adminRecipients : $order_details->billing_phone);
-        $phone = $this->reformatPhoneNumbers($pn);              
+        $phone = $this->reformatPhoneNumbers($pn);
         $apiInt = new \NotifyLk\Api\SmsApi();
         $apiInt->sendSMS($this->userId, $this->ApiKey, $message, $phone, $this->sendId);
     }

@@ -281,7 +281,9 @@ class NotifyLKSMS {
             '{{shop_name}}' => 'Your shop name.('.get_bloginfo('name').')',
             '{{order_id}}' => 'Ther order ID',
             '{{order_amount}}' => "Current order amount",
-            '{{order_status}}' => 'Current order status (Pending, Failed, Processing, etc...)'
+            '{{order_status}}' => 'Current order status (Pending, Failed, Processing, etc...)',
+            '{{billing_city}}' => 'The city in the customer billing address (If available)',
+            '{{customer_phone}}' => 'Customer mobile number. (If given)'
         );
 
         $fields[] = array(
