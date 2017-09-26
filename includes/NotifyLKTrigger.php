@@ -98,7 +98,7 @@ class NotifyLKTrigger {
             '{{order_status}}' => ucfirst($order_details->get_status()),
             '{{first_name}}' => ucfirst($order_details->billing_first_name),
             '{{last_name}}' => ucfirst($order_details->billing_last_name),
-            '{{billing_city}}' => explode('<br/>', $order_details->get_formatted_shipping_address())[4],
+            '{{billing_city}}' => ucfirst($order_details->billing_city),
             '{{customer_phone}}' => $order_details->billing_phone,
         );
         return str_replace(array_keys($replacements_string), $replacements_string, $message);
