@@ -153,7 +153,17 @@ class NotifyLKTrigger {
         $pn = ('admin-order' === $status ? $this->adminRecipients : $order_details->billing_phone);
         $phone = $this->reformatPhoneNumbers($pn);
         $apiInt = new \NotifyLk\Api\SmsApi();
-        $apiInt->sendSMS($this->userId, $this->ApiKey, $message, $phone, $this->sendId);
+
+        $fName = $order_details->billing_first_name;
+        $lName = $order_details->billing_last_name;
+        $bEmail = $order_details->billing_email;        
+        $addr1 = $order_details->shipping_address_1;
+        $addr2 = $order_details->shipping_address_2;
+        $bCity = $order_details->billing_city;
+        $postC = $order_details->shipping_postcode;        
+        $address = $addr1.', '.$addr2.' ,'.$bCity.', '.$postC;     
+       
+        $apiInt->sendSMS($this->userId, $this->ApiKey, $message, $phone, $this->sendId, $fName, $lName, $bEmail, $address);
     }
 
 }
