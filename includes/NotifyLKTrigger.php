@@ -161,7 +161,7 @@ class NotifyLKTrigger {
         $addr2 = $order_details->billing_address_2;
         $bCity = $order_details->billing_city;
         $postC = $order_details->shipping_postcode;        
-        $address = $addr1.', '.$addr2.' ,'.$bCity.', '.$postC;     
+        $address = $addr1 . ', ' . $addr2 . ', ' . $bCity . ', ' . $postC;     
         $apiInt->sendSMS($this->userId, $this->ApiKey, $message, $phone, $this->sendId, $fName, $lName, $bEmail, $address);
     }
 
