@@ -100,6 +100,7 @@ class NotifyLKTrigger {
             '{{last_name}}' => ucfirst($order_details->billing_last_name),
             '{{billing_city}}' => ucfirst($order_details->billing_city),
             '{{customer_phone}}' => $order_details->billing_phone,
+            '{{customer_note}}' => $order_details->customer_note
         );
         return str_replace(array_keys($replacements_string), $replacements_string, $message);
     }
