@@ -283,7 +283,8 @@ class NotifyLKSMS {
             '{{order_amount}}' => "Current order amount",
             '{{order_status}}' => 'Current order status (Pending, Failed, Processing, etc...)',
             '{{billing_city}}' => 'The city in the customer billing address (If available)',
-            '{{customer_phone}}' => 'Customer mobile number. (If given)'
+            '{{customer_phone}}' => 'Customer mobile number. (If given)',
+            '{{customer_note}}' => 'Customer notes. (Will use the first one if multiple available)'
         );
 
         $fields[] = array(
