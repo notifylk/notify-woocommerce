@@ -91,6 +91,7 @@ class NotifyLKTrigger {
     }
 
     public static function shortCode($message, $order_details) {
+        $customer_notes = $order_details->get_customer_order_notes();
         $replacements_string = array(
             '{{shop_name}}' => get_bloginfo('name'),
             '{{order_id}}' => $order_details->get_order_number(),
@@ -100,7 +101,7 @@ class NotifyLKTrigger {
             '{{last_name}}' => ucfirst($order_details->billing_last_name),
             '{{billing_city}}' => ucfirst($order_details->billing_city),
             '{{customer_phone}}' => $order_details->billing_phone,
-            '{{customer_note}}' => $order_details->customer_note
+            '{{customer_note}}' => isset($customer_notes[0]) ? $customer_notes[0]->comment_content : ''
         );
         return str_replace(array_keys($replacements_string), $replacements_string, $message);
     }
