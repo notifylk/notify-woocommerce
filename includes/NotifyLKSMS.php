@@ -101,7 +101,36 @@ class NotifyLKSMS
             );
         }
 
+        /**
+         * 
+         * Customer Note settings
+         * 
+         */
 
+        $fields[] = array('type' => 'sectionend', 'id' => TEXTDOMAIN . 'notesettings');
+        $fields[] = array(
+            'title' => 'Customer Note Notifications',
+            'type' => 'title',
+            'desc' => 'Enable SMS notifications for new customer notes.',
+            'id' => TEXTDOMAIN . 'notesettings'
+        );
+
+        $fields[] = array(
+            'title' => 'Send Notes Alerts',
+            'id' => $this->prefix . 'enable_notes_sms',
+            'default' => 'no',
+            'type' => 'checkbox',
+            'desc' => 'Enable SMS alerts for new customer notes'
+        );
+
+        $fields[] = array(
+            'title' => 'Note Message Prefix',
+            'id' => $this->prefix . 'note_sms_template',
+            'desc_tip' => 'Text you provide here will be prepended to your customer note.',
+            'css' => 'min-width:500px;',
+            'default' => 'You have a new note: ',
+            'type' => 'textarea'
+        );
 
 
         /*
@@ -119,8 +148,9 @@ class NotifyLKSMS
         );
 
         $fields[] = array(
-            'title' => 'Receive Admin Notifications for New Orders.',
+            'title' => 'Receive Admin Notifications',
             'id' => $this->prefix . 'enable_admin_sms',
+            'desc' => 'Enable admin notifications for new customer orders.',
             'default' => 'no',
             'type' => 'checkbox'
         );
@@ -134,7 +164,7 @@ class NotifyLKSMS
         $fields[] = array(
             'title' => 'Message',
             'id' => $this->prefix . 'admin_sms_template',
-            'desc_tip' => 'Customization tags for new order SMS: {{shop_name}}, {{order_id}}, {{order_amount}}. 160 Characters.',
+            'desc_tip' => 'Customization tags for new order SMS: {{shop_name}}, {{order_id}}, {{order_amount}}.',
             'css' => 'min-width:500px;',
             'default' => 'You have a new customer order for {{shop_name}}. Order #{{order_id}}, Total Value: {{order_amount}}',
             'type' => 'textarea'

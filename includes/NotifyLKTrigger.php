@@ -37,6 +37,7 @@ class NotifyLKTrigger
         $this->contentAdmin = get_option($this->prefix . 'admin_sms_template');
 
         add_action('woocommerce_order_status_changed', array($this, 'notify_send_sms_for_events'), 11, 3);
+        add_action('woocommerce_new_customer_note', array($this, 'notifySendOrderNoteSMS'));
     }
 
     public function notify_send_sms_for_events($order_id, $from_status, $to_status)
@@ -50,6 +51,14 @@ class NotifyLKTrigger
     {
         if ($this->yesAdminMsg)
             $this->NotifyLKsend($order_id, 'admin-order');
+    }
+
+    public function notifySendOrderNoteSMS($data)
+    {
+        if (get_option($this->prefix . 'enable_notes_sms') !== "yes")
+            return;
+
+        $this->NotifyLKsend($data['order_id'], 'new-note', $data['customer_note']);
     }
 
     public static function shortCode($message, $order_details)
@@ -80,13 +89,16 @@ class NotifyLKTrigger
         return $number;
     }
 
-    private function NotifyLKsend($order_id, $status)
+    private function NotifyLKsend($order_id, $status, $message_text = '')
     {
         $order_details = new WC_Order($order_id);
         $message = '';
 
         if ($status == 'admin-order') {
             $message = $this->contentAdmin;
+        } elseif($status == 'new-note'){
+            $message_prefix = get_option($this->prefix  .'note_sms_template');
+            $message = $message_prefix .  $message_text;
         } else {
             $message = get_option($this->prefix . $status .'_sms_template');
             if(empty($message))
