@@ -22,19 +22,6 @@ class NotifyLKSMS
         add_action('woocommerce_update_options_settings_tab_notifylk', array($this, 'update_settings'));
 
         /*
-         * Customer Messages
-         */
-        // add_action('woocommerce_order_status_pending', array($triggerAPI, 'notify_send_customer_sms_for_woo_order_status_pending'), 10, 1);
-        // add_action('woocommerce_order_status_failed', array($triggerAPI, 'notify_send_customer_sms_for_woo_order_status_failed'), 10, 1);
-        // add_action('woocommerce_order_status_on-hold', array($triggerAPI, 'notify_send_customer_sms_for_woo_order_status_on_hold'), 10, 1);
-        // add_action('woocommerce_order_status_processing', array($triggerAPI, 'notify_send_customer_sms_for_woo_order_status_processing'), 10, 1);
-        // add_action('woocommerce_order_status_completed', array($triggerAPI, 'notify_send_customer_sms_for_woo_order_status_completed'), 10, 1);
-        // add_action('woocommerce_order_status_refunded', array($triggerAPI, 'notify_send_customer_sms_for_woo_order_status_refunded'), 10, 1);
-        // add_action('woocommerce_order_status_cancelled', array($triggerAPI, 'notify_send_customer_sms_for_woo_order_status_cancelled'), 10, 1);
-
-
-
-        /*
          * Send new order admin SMS
          */
         add_action('woocommerce_order_status_processing', array($triggerAPI, 'notify_send_admin_sms_for_woo_new_order'), 10, 1);
@@ -42,7 +29,7 @@ class NotifyLKSMS
 
     public static function add_settings_tab($settings_tabs)
     {
-        $settings_tabs['settings_tab_notifylk'] = __('NotifyLK SMS', TEXTDOMAIN);
+        $settings_tabs['settings_tab_notifylk'] = __('Notify.lk SMS', TEXTDOMAIN);
         return $settings_tabs;
     }
 
