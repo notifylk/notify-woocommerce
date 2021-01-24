@@ -96,20 +96,17 @@ class NotifyLKTrigger
 
         if ($status == 'admin-order') {
             $message = $this->contentAdmin;
-        } elseif($status == 'new-note'){
-            $message_prefix = get_option($this->prefix  .'note_sms_template');
+        } elseif ($status == 'new-note') {
+            $message_prefix = get_option($this->prefix  . 'note_sms_template');
             $message = $message_prefix .  $message_text;
         } else {
-            $message = get_option($this->prefix . $status .'_sms_template');
-            if(empty($message))
+            $message = get_option($this->prefix . $status . '_sms_template');
+            if (empty($message))
                 $message = $this->contentDefault;
         }
 
         $message = (empty($message) ? $this->contentDefault : $message);
         $message = self::shortCode($message, $order_details);
-        $pn = ('admin-order' === $status ? $this->adminRecipients : $order_details->billing_phone);
-        $phone = $this->reformatPhoneNumbers($pn);
-        $apiInt = new \NotifyLk\Api\SmsApi();
 
         $fName = $order_details->billing_first_name;
         $lName = $order_details->billing_last_name;
@@ -119,10 +116,22 @@ class NotifyLKTrigger
         $bCity = $order_details->billing_city;
         $postC = $order_details->shipping_postcode;
         $address = $addr1 . ', ' . $addr2 . ', ' . $bCity . ', ' . $postC;
-        try {
-            $apiInt->sendSMS($this->userId, $this->ApiKey, $message, $phone, $this->sendId, $fName, $lName, $bEmail, $address);
-        } catch (\Throwable $th) {
-            //throw $th;
+
+        $pn = ('admin-order' === $status ? $this->adminRecipients : $order_details->billing_phone);
+
+        $to_numbers = explode(',', $pn);
+        foreach ($to_numbers as $numb) {
+            if (empty($numb))
+                continue;
+
+            $phone = $this->reformatPhoneNumbers($numb);
+            $apiInt = new \NotifyLk\Api\SmsApi();
+
+            try {
+                $apiInt->sendSMS($this->userId, $this->ApiKey, $message, $phone, $this->sendId, $fName, $lName, $bEmail, $address);
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
         }
     }
 }

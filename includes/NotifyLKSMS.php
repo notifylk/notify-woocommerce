@@ -157,7 +157,8 @@ class NotifyLKSMS
         $fields[] = array(
             'title' => 'Admin Mobile Number',
             'id' => $this->prefix . 'admin_sms_recipients',
-            'desc_tip' => 'Enter admin mobile number begining with your country code.(e.g. 9471XXXXXXXX).',
+            'desc' => 'Enter admin mobile numbers. You can use multiple numbers by separating with a comma.<br> Example: 0777123456, 0712755777.',
+            'desc_tip' => 'Enter admin mobile numbers. You can use multiple numbers by separating with a comma.<br> Example: 0777123456, 0712755777.',
             'default' => '',
             'type' => 'text'
         );
@@ -224,29 +225,26 @@ class NotifyLKSMS
         $avbShortcodes = array(
             '{{first_name}}' => "First name of the customer.",
             '{{last_name}}' => "Last name of the customer.",
-            '{{shop_name}}' => 'Your shop name.(' . get_bloginfo('name') . ')',
-            '{{order_id}}' => 'Ther order ID',
-            '{{order_amount}}' => "Current order amount",
-            '{{order_status}}' => 'Current order status (Pending, Failed, Processing, etc...)',
-            '{{billing_city}}' => 'The city in the customer billing address (If available)',
-            '{{customer_phone}}' => 'Customer mobile number. (If given)'
+            '{{shop_name}}' => 'Your shop name (' . get_bloginfo('name') . ').',
+            '{{order_id}}' => 'Ther order ID.',
+            '{{order_amount}}' => "Current order amount.",
+            '{{order_status}}' => 'Current order status (Pending, Failed, Processing, etc...).',
+            '{{billing_city}}' => 'The city in the customer billing address (If available).',
+            '{{customer_phone}}' => 'Customer mobile number (If given).'
         );
+
+        $shortcode_desc = '';
+        foreach ($avbShortcodes as $handle => $description) {
+            $shortcode_desc .= '<b>' . $handle . '</b> - ' . $description . '<br>';
+        }
 
         $fields[] = array(
             'title' => __('Available Shortcodes', TEXTDOMAIN),
             'type' => 'title',
-            'desc' => 'These shortcodes can be used in your message body.',
+            'desc' => 'These shortcodes can be used in your message body contents. <br><br>' . $shortcode_desc,
             'id' => TEXTDOMAIN . 'notifylk_settings'
         );
 
-        foreach ($avbShortcodes as $handle => $description) {
-            $fields[] = array(
-                'title' => __($handle, TEXTDOMAIN),
-                'desc' => __($description, TEXTDOMAIN),
-                'type' => 'text',
-                'css' => 'display:none;',
-            );
-        }
         $fields[] = array('type' => 'sectionend', 'id' => TEXTDOMAIN . 'apisettings');
         return $fields;
     }
