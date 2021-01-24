@@ -81,7 +81,7 @@ class NotifyLKSMS
             'desc_tip' => __('This message will be sent by default if there are no any text in the following event message fields.', TEXTDOMAIN),
             'default' => __('Your order #{{order_id}} is now {{order_status}}. Thank you for shopping at {{shop_name}}.', TEXTDOMAIN),
             'type' => 'textarea',
-            'css' => 'min-width:500px;min-height:100px;'
+            'css' => 'min-width:500px;min-height:80px;'
         );
 
         foreach ($all_statusses as $key => $val) {
@@ -97,7 +97,7 @@ class NotifyLKSMS
                 'id' => $this->prefix . $key . '_sms_template',
                 'type' => 'textarea',
                 'placeholder' => 'SMS Content for the ' . $val . ' event',
-                'css' => 'min-width:500px;margin-top:-25px;min-height:100px;'
+                'css' => 'min-width:500px;margin-top:-25px;min-height:80px;'
             );
         }
 
