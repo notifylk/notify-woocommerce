@@ -1,15 +1,18 @@
 <?php
 
-class NotifyLKSMS {
+class NotifyLKSMS
+{
 
     public $prefix = 'notifylk_sms_woo_';
 
-    public function __construct($baseFile = null) {
+    public function __construct($baseFile = null)
+    {
         define("TEXTDOMAIN", "settings_tab_notifylk");
         $this->init();
     }
 
-    private function init() {
+    private function init()
+    {
         /*
          * Add NotifyLK SMS to woo-commerce settings.
          */
@@ -29,27 +32,34 @@ class NotifyLKSMS {
         // add_action('woocommerce_order_status_refunded', array($triggerAPI, 'notify_send_customer_sms_for_woo_order_status_refunded'), 10, 1);
         // add_action('woocommerce_order_status_cancelled', array($triggerAPI, 'notify_send_customer_sms_for_woo_order_status_cancelled'), 10, 1);
 
+
+
         /*
          * Send new order admin SMS
          */
         add_action('woocommerce_order_status_processing', array($triggerAPI, 'notify_send_admin_sms_for_woo_new_order'), 10, 1);
     }
 
-    public static function add_settings_tab($settings_tabs) {
+    public static function add_settings_tab($settings_tabs)
+    {
         $settings_tabs['settings_tab_notifylk'] = __('NotifyLK SMS', TEXTDOMAIN);
         return $settings_tabs;
     }
 
-    public function update_settings() {
+    public function update_settings()
+    {
         woocommerce_update_options($this->getFields());
     }
 
-    public function settings_tab() {
+    public function settings_tab()
+    {
         woocommerce_admin_fields($this->getFields());
     }
 
-    private function getFields() {
+    private function getFields()
+    {
 
+        $all_statusses = wc_get_order_statuses();
 
         /*
          * 
@@ -64,74 +74,6 @@ class NotifyLKSMS {
             'desc' => 'Send SMS to customer\'s mobile phone. Will be sent to the phone number which customer is providing while checkout process.',
             'id' => TEXTDOMAIN . 'customersettings'
         );
-        $fields[] = array(
-            'title' => 'Enable SMS notifications for these customer actions',
-            'desc' => 'Pending',
-            'id' => $this->prefix . 'send_sms_pending',
-            'default' => 'yes',
-            'desc_tip' => __('Order received (unpaid)', TEXTDOMAIN),
-            'type' => 'checkbox',
-            'checkboxgroup' => 'start'
-        );
-
-        $fields[] = array(
-            'desc' => __('Failed', TEXTDOMAIN),
-            'id' => $this->prefix . 'send_sms_failed',
-            'default' => 'yes',
-            'desc_tip' => __('Payment failed or was declined (unpaid)', TEXTDOMAIN),
-            'type' => 'checkbox',
-            'checkboxgroup' => '',
-            'autoload' => false
-        );
-        $fields[] = array(
-            'desc' => __('Processing', TEXTDOMAIN),
-            'id' => $this->prefix . 'send_sms_processing',
-            'default' => 'yes',
-            'desc_tip' => __('Payment received', TEXTDOMAIN),
-            'type' => 'checkbox',
-            'checkboxgroup' => '',
-            'autoload' => false
-        );
-        $fields[] = array(
-            'desc' => __('Completed', TEXTDOMAIN),
-            'id' => $this->prefix . 'send_sms_completed',
-            'default' => 'yes',
-            'desc_tip' => __('Order fulfilled and complete', TEXTDOMAIN),
-            'type' => 'checkbox',
-            'checkboxgroup' => '',
-            'autoload' => false
-        );
-
-        $fields[] = array(
-            'desc' => __('On-Hold', TEXTDOMAIN),
-            'id' => $this->prefix . 'send_sms_on-hold',
-            'default' => 'yes',
-            'desc_tip' => __('Order received (unpaid)', TEXTDOMAIN),
-            'type' => 'checkbox',
-            'checkboxgroup' => '',
-            'autoload' => false
-        );
-
-
-        $fields[] = array(
-            'desc' => __('Cancelled', TEXTDOMAIN),
-            'id' => $this->prefix . 'send_sms_cancelled',
-            'default' => 'yes',
-            'desc_tip' => __('Cancelled by an admin or the customer', TEXTDOMAIN),
-            'type' => 'checkbox',
-            'checkboxgroup' => '',
-            'autoload' => false
-        );
-        $fields[] = array(
-            'desc' => __('Refunded', TEXTDOMAIN),
-            'id' => $this->prefix . 'send_sms_refunded',
-            'default' => 'yes',
-            'desc_tip' => __('Refunded by an admin', TEXTDOMAIN),
-            'type' => 'checkbox',
-            'checkboxgroup' => 'end',
-            'autoload' => false
-        );
-
 
         $fields[] = array(
             'title' => 'Default Message',
@@ -139,52 +81,26 @@ class NotifyLKSMS {
             'desc_tip' => __('This message will be sent by default if there are no any text in the following event message fields.', TEXTDOMAIN),
             'default' => __('Your order #{{order_id}} is now {{order_status}}. Thank you for shopping at {{shop_name}}.', TEXTDOMAIN),
             'type' => 'textarea',
-            'css' => 'min-width:500px;'
+            'css' => 'min-width:500px;min-height:100px;'
         );
 
-        $fields[] = array(
-            'title' => __('Pending Message', TEXTDOMAIN),
-            'id' => $this->prefix . 'pending_sms_template',
-            'css' => 'min-width:500px;',
-            'type' => 'textarea'
-        );
-        $fields[] = array(
-            'title' => __('Failed Message', TEXTDOMAIN),
-            'id' => $this->prefix . 'failed_sms_template',
-            'css' => 'min-width:500px;',
-            'type' => 'textarea'
-        );
+        foreach ($all_statusses as $key => $val) {
+            $key = str_replace("wc-", "", $key);
+            $fields[] = array(
+                'title' => $val,
+                'desc' => 'Enable "' . $val . '" status alert',
+                'id' => $this->prefix . 'send_sms_' . $key,
+                'default' => 'yes',
+                'type' => 'checkbox',
+            );
+            $fields[] = array(
+                'id' => $this->prefix . $key . '_sms_template',
+                'type' => 'textarea',
+                'placeholder' => 'SMS Content for the ' . $val . ' event',
+                'css' => 'min-width:500px;margin-top:-25px;min-height:100px;'
+            );
+        }
 
-        $fields[] = array(
-            'title' => __('Processing Message', TEXTDOMAIN),
-            'id' => $this->prefix . 'processing_sms_template',
-            'css' => 'min-width:500px;',
-            'type' => 'textarea'
-        );
-        $fields[] = array(
-            'title' => __('Completed Message', TEXTDOMAIN),
-            'id' => $this->prefix . 'completed_sms_template',
-            'css' => 'min-width:500px;',
-            'type' => 'textarea'
-        );
-        $fields[] = array(
-            'title' => __('On-Hold Message', TEXTDOMAIN),
-            'id' => $this->prefix . 'on-hold_sms_template',
-            'css' => 'min-width:500px;',
-            'type' => 'textarea'
-        );
-        $fields[] = array(
-            'title' => __('Cancelled Message', TEXTDOMAIN),
-            'id' => $this->prefix . 'cancelled_sms_template',
-            'css' => 'min-width:500px;',
-            'type' => 'textarea'
-        );
-        $fields[] = array(
-            'title' => __('Refund Message', TEXTDOMAIN),
-            'id' => $this->prefix . 'refunded_sms_template',
-            'css' => 'min-width:500px;',
-            'type' => 'textarea'
-        );
 
 
 
@@ -274,11 +190,11 @@ class NotifyLKSMS {
         /*
          * Shortcodes and its descriptions.
          */
-        
+
         $avbShortcodes = array(
             '{{first_name}}' => "First name of the customer.",
             '{{last_name}}' => "Last name of the customer.",
-            '{{shop_name}}' => 'Your shop name.('.get_bloginfo('name').')',
+            '{{shop_name}}' => 'Your shop name.(' . get_bloginfo('name') . ')',
             '{{order_id}}' => 'Ther order ID',
             '{{order_amount}}' => "Current order amount",
             '{{order_status}}' => 'Current order status (Pending, Failed, Processing, etc...)',
@@ -304,5 +220,4 @@ class NotifyLKSMS {
         $fields[] = array('type' => 'sectionend', 'id' => TEXTDOMAIN . 'apisettings');
         return $fields;
     }
-
 }
