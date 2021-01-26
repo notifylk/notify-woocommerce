@@ -4,7 +4,6 @@ class NotifyLKSMS
 {
 
     public $prefix = 'notifylk_sms_woo_';
-    public $tab_prefix = 'settings_tab_notifylk';
 
     public function __construct($baseFile = null)
     {
@@ -29,7 +28,7 @@ class NotifyLKSMS
 
     public function add_settings_tab($settings_tabs)
     {
-        $settings_tabs['settings_tab_notifylk'] = __('Notify.lk SMS', $this->tab_prefix);
+        $settings_tabs['settings_tab_notifylk'] = __('Notify.lk SMS', $this->prefix);
         return $settings_tabs;
     }
 
@@ -59,14 +58,14 @@ class NotifyLKSMS
             'title' => 'Notifications for Customer',
             'type' => 'title',
             'desc' => 'Send SMS to customer\'s mobile phone. Will be sent to the phone number which customer is providing while checkout process.',
-            'id' => $this->tab_prefix . 'customersettings'
+            'id' => $this->prefix . 'customersettings'
         );
 
         $fields[] = array(
             'title' => 'Default Message',
             'id' => $this->prefix . 'default_sms_template',
-            'desc_tip' => __('This message will be sent by default if there are no any text in the following event message fields.', $this->tab_prefix),
-            'default' => __('Your order #{{order_id}} is now {{order_status}}. Thank you for shopping at {{shop_name}}.', $this->tab_prefix),
+            'desc_tip' => __('This message will be sent by default if there are no any text in the following event message fields.', $this->prefix),
+            'default' => __('Your order #{{order_id}} is now {{order_status}}. Thank you for shopping at {{shop_name}}.', $this->prefix),
             'type' => 'textarea',
             'css' => 'min-width:500px;min-height:80px;'
         );
@@ -94,12 +93,12 @@ class NotifyLKSMS
          * 
          */
 
-        $fields[] = array('type' => 'sectionend', 'id' => $this->tab_prefix . 'notesettings');
+        $fields[] = array('type' => 'sectionend', 'id' => $this->prefix . 'notesettings');
         $fields[] = array(
             'title' => 'Customer Note Notifications',
             'type' => 'title',
             'desc' => 'Enable SMS notifications for new customer notes.',
-            'id' => $this->tab_prefix . 'notesettings'
+            'id' => $this->prefix . 'notesettings'
         );
 
         $fields[] = array(
@@ -126,12 +125,12 @@ class NotifyLKSMS
          * 
          */
 
-        $fields[] = array('type' => 'sectionend', 'id' => $this->tab_prefix . 'adminsettings');
+        $fields[] = array('type' => 'sectionend', 'id' => $this->prefix . 'adminsettings');
         $fields[] = array(
             'title' => 'Notification for Admin',
             'type' => 'title',
             'desc' => 'Enable admin notifications for new customer orders.',
-            'id' => $this->tab_prefix . 'adminsettings'
+            'id' => $this->prefix . 'adminsettings'
         );
 
         $fields[] = array(
@@ -164,45 +163,45 @@ class NotifyLKSMS
          * 
          */
 
-        $fields[] = array('type' => 'sectionend', 'id' => $this->tab_prefix . 'apisettings');
+        $fields[] = array('type' => 'sectionend', 'id' => $this->prefix . 'apisettings');
         $fields[] = array(
-            'title' => __('Notify.lk Settings', $this->tab_prefix),
+            'title' => __('Notify.lk Settings', $this->prefix),
             'type' => 'title',
             'desc' => 'Provide following details from your Notify.lk account. <a href="https://app.notify.lk/settings/api-keys" target="_blank">Click here</a> to go to API KEY section.',
-            'id' => $this->tab_prefix . 'notifylk_settings'
+            'id' => $this->prefix . 'notifylk_settings'
         );
 
         $fields[] = array(
-            'title' => __('User ID', $this->tab_prefix),
+            'title' => __('User ID', $this->prefix),
             'id' => $this->prefix . 'user_id',
-            'desc_tip' => __('User id available in your NotifyLK account settings page.', $this->tab_prefix),
+            'desc_tip' => __('User id available in your NotifyLK account settings page.', $this->prefix),
             'type' => 'text',
             'css' => 'min-width:300px;',
         );
         $fields[] = array(
-            'title' => __('API Key', $this->tab_prefix),
+            'title' => __('API Key', $this->prefix),
             'id' => $this->prefix . 'api_key',
-            'desc_tip' => __('API key available in your NotifyLK account.', $this->tab_prefix),
+            'desc_tip' => __('API key available in your NotifyLK account.', $this->prefix),
             'type' => 'text',
             'css' => 'min-width:300px;',
         );
         $fields[] = array(
-            'title' => __('Sender ID', $this->tab_prefix),
+            'title' => __('Sender ID', $this->prefix),
             'id' => $this->prefix . 'from_id',
-            'desc_tip' => __('Enter your NotifyLK purchased SenderID.', $this->tab_prefix),
+            'desc_tip' => __('Enter your NotifyLK purchased SenderID.', $this->prefix),
             'type' => 'text',
             'css' => 'min-width:300px;',
         );
         /*
           $fields[] = array(
-          'desc' => __('Use if experiencing issues.', $this->tab_prefix),
-          'title' => __('Log Api Errors', $this->tab_prefix),
+          'desc' => __('Use if experiencing issues.', $this->prefix),
+          'title' => __('Log Api Errors', $this->prefix),
           'id' => $this->prefix . 'log_errors',
           'default' => 'no',
           'type' => 'checkbox'
           );
          */
-        $fields[] = array('type' => 'sectionend', 'id' => $this->tab_prefix . 'customersettings');
+        $fields[] = array('type' => 'sectionend', 'id' => $this->prefix . 'customersettings');
 
 
         /*
@@ -226,13 +225,13 @@ class NotifyLKSMS
         }
 
         $fields[] = array(
-            'title' => __('Available Shortcodes', $this->tab_prefix),
+            'title' => __('Available Shortcodes', $this->prefix),
             'type' => 'title',
             'desc' => 'These shortcodes can be used in your message body contents. <br><br>' . $shortcode_desc,
-            'id' => $this->tab_prefix . 'notifylk_settings'
+            'id' => $this->prefix . 'notifylk_settings'
         );
 
-        $fields[] = array('type' => 'sectionend', 'id' => $this->tab_prefix . 'apisettings');
+        $fields[] = array('type' => 'sectionend', 'id' => $this->prefix . 'apisettings');
         return $fields;
     }
 }
