@@ -4,10 +4,10 @@ class NotifyLKSMS
 {
 
     public $prefix = 'notifylk_sms_woo_';
+    public $tab_prefix = 'settings_tab_notifylk';
 
     public function __construct($baseFile = null)
     {
-        define("TEXTDOMAIN", "settings_tab_notifylk");
         $this->init();
     }
 
@@ -17,7 +17,7 @@ class NotifyLKSMS
          * Add NotifyLK SMS to woo-commerce settings.
          */
         $triggerAPI = new NotifyLKTrigger();
-        add_filter('woocommerce_settings_tabs_array', __CLASS__ . '::add_settings_tab', 50);
+        add_filter('woocommerce_settings_tabs_array', array($this, 'add_settings_tab') , 50);
         add_action('woocommerce_settings_tabs_settings_tab_notifylk', array($this, 'settings_tab'));
         add_action('woocommerce_update_options_settings_tab_notifylk', array($this, 'update_settings'));
 
@@ -27,9 +27,9 @@ class NotifyLKSMS
         add_action('woocommerce_order_status_processing', array($triggerAPI, 'notify_send_admin_sms_for_woo_new_order'), 10, 1);
     }
 
-    public static function add_settings_tab($settings_tabs)
+    public function add_settings_tab($settings_tabs)
     {
-        $settings_tabs['settings_tab_notifylk'] = __('Notify.lk SMS', TEXTDOMAIN);
+        $settings_tabs['settings_tab_notifylk'] = __('Notify.lk SMS', $this->tab_prefix);
         return $settings_tabs;
     }
 
@@ -59,14 +59,14 @@ class NotifyLKSMS
             'title' => 'Notifications for Customer',
             'type' => 'title',
             'desc' => 'Send SMS to customer\'s mobile phone. Will be sent to the phone number which customer is providing while checkout process.',
-            'id' => TEXTDOMAIN . 'customersettings'
+            'id' => $this->tab_prefix . 'customersettings'
         );
 
         $fields[] = array(
             'title' => 'Default Message',
             'id' => $this->prefix . 'default_sms_template',
-            'desc_tip' => __('This message will be sent by default if there are no any text in the following event message fields.', TEXTDOMAIN),
-            'default' => __('Your order #{{order_id}} is now {{order_status}}. Thank you for shopping at {{shop_name}}.', TEXTDOMAIN),
+            'desc_tip' => __('This message will be sent by default if there are no any text in the following event message fields.', $this->tab_prefix),
+            'default' => __('Your order #{{order_id}} is now {{order_status}}. Thank you for shopping at {{shop_name}}.', $this->tab_prefix),
             'type' => 'textarea',
             'css' => 'min-width:500px;min-height:80px;'
         );
@@ -94,12 +94,12 @@ class NotifyLKSMS
          * 
          */
 
-        $fields[] = array('type' => 'sectionend', 'id' => TEXTDOMAIN . 'notesettings');
+        $fields[] = array('type' => 'sectionend', 'id' => $this->tab_prefix . 'notesettings');
         $fields[] = array(
             'title' => 'Customer Note Notifications',
             'type' => 'title',
             'desc' => 'Enable SMS notifications for new customer notes.',
-            'id' => TEXTDOMAIN . 'notesettings'
+            'id' => $this->tab_prefix . 'notesettings'
         );
 
         $fields[] = array(
@@ -126,12 +126,12 @@ class NotifyLKSMS
          * 
          */
 
-        $fields[] = array('type' => 'sectionend', 'id' => TEXTDOMAIN . 'adminsettings');
+        $fields[] = array('type' => 'sectionend', 'id' => $this->tab_prefix . 'adminsettings');
         $fields[] = array(
             'title' => 'Notification for Admin',
             'type' => 'title',
             'desc' => 'Enable admin notifications for new customer orders.',
-            'id' => TEXTDOMAIN . 'adminsettings'
+            'id' => $this->tab_prefix . 'adminsettings'
         );
 
         $fields[] = array(
@@ -164,45 +164,45 @@ class NotifyLKSMS
          * 
          */
 
-        $fields[] = array('type' => 'sectionend', 'id' => TEXTDOMAIN . 'apisettings');
+        $fields[] = array('type' => 'sectionend', 'id' => $this->tab_prefix . 'apisettings');
         $fields[] = array(
-            'title' => __('Notify.lk Settings', TEXTDOMAIN),
+            'title' => __('Notify.lk Settings', $this->tab_prefix),
             'type' => 'title',
             'desc' => 'Provide following details from your Notify.lk account. <a href="https://app.notify.lk/settings/api-keys" target="_blank">Click here</a> to go to API KEY section.',
-            'id' => TEXTDOMAIN . 'notifylk_settings'
+            'id' => $this->tab_prefix . 'notifylk_settings'
         );
 
         $fields[] = array(
-            'title' => __('User ID', TEXTDOMAIN),
+            'title' => __('User ID', $this->tab_prefix),
             'id' => $this->prefix . 'user_id',
-            'desc_tip' => __('User id available in your NotifyLK account settings page.', TEXTDOMAIN),
+            'desc_tip' => __('User id available in your NotifyLK account settings page.', $this->tab_prefix),
             'type' => 'text',
             'css' => 'min-width:300px;',
         );
         $fields[] = array(
-            'title' => __('API Key', TEXTDOMAIN),
+            'title' => __('API Key', $this->tab_prefix),
             'id' => $this->prefix . 'api_key',
-            'desc_tip' => __('API key available in your NotifyLK account.', TEXTDOMAIN),
+            'desc_tip' => __('API key available in your NotifyLK account.', $this->tab_prefix),
             'type' => 'text',
             'css' => 'min-width:300px;',
         );
         $fields[] = array(
-            'title' => __('Sender ID', TEXTDOMAIN),
+            'title' => __('Sender ID', $this->tab_prefix),
             'id' => $this->prefix . 'from_id',
-            'desc_tip' => __('Enter your NotifyLK purchased SenderID.', TEXTDOMAIN),
+            'desc_tip' => __('Enter your NotifyLK purchased SenderID.', $this->tab_prefix),
             'type' => 'text',
             'css' => 'min-width:300px;',
         );
         /*
           $fields[] = array(
-          'desc' => __('Use if experiencing issues.', TEXTDOMAIN),
-          'title' => __('Log Api Errors', TEXTDOMAIN),
+          'desc' => __('Use if experiencing issues.', $this->tab_prefix),
+          'title' => __('Log Api Errors', $this->tab_prefix),
           'id' => $this->prefix . 'log_errors',
           'default' => 'no',
           'type' => 'checkbox'
           );
          */
-        $fields[] = array('type' => 'sectionend', 'id' => TEXTDOMAIN . 'customersettings');
+        $fields[] = array('type' => 'sectionend', 'id' => $this->tab_prefix . 'customersettings');
 
 
         /*
@@ -226,13 +226,13 @@ class NotifyLKSMS
         }
 
         $fields[] = array(
-            'title' => __('Available Shortcodes', TEXTDOMAIN),
+            'title' => __('Available Shortcodes', $this->tab_prefix),
             'type' => 'title',
             'desc' => 'These shortcodes can be used in your message body contents. <br><br>' . $shortcode_desc,
-            'id' => TEXTDOMAIN . 'notifylk_settings'
+            'id' => $this->tab_prefix . 'notifylk_settings'
         );
 
-        $fields[] = array('type' => 'sectionend', 'id' => TEXTDOMAIN . 'apisettings');
+        $fields[] = array('type' => 'sectionend', 'id' => $this->tab_prefix . 'apisettings');
         return $fields;
     }
 }
