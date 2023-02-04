@@ -7,4 +7,5 @@
 require 'php-sdk/autoload.php';
 require 'NotifyLKSMS.php';
 require 'NotifyLKTrigger.php';
+require 'NotifyLKOTP.php';
 

@@ -24,6 +24,8 @@ class NotifyLKSMS
          * Send new order admin SMS
          */
         add_action('woocommerce_order_status_processing', array($triggerAPI, 'notify_send_admin_sms_for_woo_new_order'), 10, 1);
+
+        $addOTPFields = new NotifyLKOTP();
     }
 
     public function add_settings_tab($settings_tabs)
