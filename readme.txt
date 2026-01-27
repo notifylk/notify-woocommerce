@@ -1,9 +1,9 @@
 === Notify.lk SMS for WooCommerce ===
 Contributors: notifylk
-Tags: woocommerce, sms, sri lanka
-Requires at least: 3.0.1
-Tested up to: 5.6
-Stable tag: 1.0.0
+Tags: woocommerce, sms, sri lanka, notify sms, notify.lk, woocommerce sms
+Requires at least: 6.0
+Tested up to: 6.9
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,7 +53,22 @@ Go to our website https://www.notify.lk and register for an account.
 = Can this plugin send SMS? =
 Yes, if you are registered Notify.lk user, you can integrate this plugin with Notify.lk and trigger SMS automatically for WooCommerce order status updates and order note updates as well.
 
+== Screenshots ==
+
+1. Admin settings page
+2. Admin settings page
+
 == Changelog ==
+
+= 1.1.2 =
+* Get upto date with new WooCommerce versions.
+= 1.1.1 =
+* Get upto date with new WooCommerce versions.
+= 1.1 =
+* Support custom events added by third party plugins. 
+* Support sending customer notes via SMS to customers.
+* Support multiple numbers as admins to send admin order notifications.
+* Improved settings page layout.
 
 = 1.0 =
 * Initial Release
